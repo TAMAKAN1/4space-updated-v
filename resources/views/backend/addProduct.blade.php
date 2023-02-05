@@ -24,7 +24,7 @@
                                 @enderror
                             </div>
                             <div class="col-md-4">
-                            <label for=""> <strong>Product SKU*</strong></label>
+                                <label for=""> <strong>Product SKU*</strong></label>
                                 <input type="text" class="form-control @error('SKU') is-invalid @enderror" name="SKU" placeholder="Ex.. P-001" required>
                                 @error('SKU')
                                 <span class="invalid-feedback" role="alert">
@@ -113,7 +113,18 @@
                                 </span>
                                 @enderror
                             </div>
+
                             <div class="col-md-6">
+                                <label for=""> <strong>Size</strong></label>
+                                <input type="text" class="form-control @error('size') is-invalid @enderror" name="size" placeholder="exp. size1, size2" data-role="tagsinput" required>
+                                @error('size')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+
+                            </div>
+                            <div class="col-md-12">
                                 <label for=""> <strong>Customization Status*</strong></label>
                                 <select name="custom_status" id="" required class="form-control">
                                     <option value="">Choose one</option>

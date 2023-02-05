@@ -39,6 +39,7 @@ class ProductController extends Controller
             'width' => $request->width,
             'height' => $request->height,
             'color' => $request->color,
+            'size' => $request->size,
             'custom_status' => $request->custom_status,
             'product_details' => $request->product_details,
         ]);
@@ -92,6 +93,7 @@ class ProductController extends Controller
             'width' => $request->width,
             'status' => $request->status,
             'height' => $request->height,
+            'size' => $request->size,
             'color' => $request->color,
             'custom_status' => $request->custom_status,
             'product_details' => $request->product_details,

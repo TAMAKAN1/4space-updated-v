@@ -98,6 +98,7 @@ class SiteSetting extends Controller
         }
         Banner::create([
             'title' => $request->title,
+            'link' => $request->link,
             'image' => $path,
         ]);
         toastr()->success('Banner Added');
@@ -115,6 +116,7 @@ class SiteSetting extends Controller
         }
         $banner->update([
             'title' => $request->title,
+            'link' => $request->link,
             'image' => $path,
         ]);
 

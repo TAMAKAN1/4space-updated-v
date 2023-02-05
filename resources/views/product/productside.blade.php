@@ -1,86 +1,84 @@
 <?php
-$banners = App\Banner::orderBy('id', 'desc')->get();
-$categories = App\Category::all();
+
+use App\Banner;
+use App\Category;
+use App\Product;
+
+$banners = Banner::latest()->take(6)->get();
+$categories = Category::orderBy('category')->get();
+$products=Product::orderBy('id','desc')->paginate(10);
 ?>
-   <!-- sidebar panel -->
-   <div class="col-lg-3 col-12 side-bar order-2 order-lg-1">
-                <div class="widget">
-                    <div class="widget-title">
-                        <h5>Categories</h5>
-                    </div>
-                    <div id="accordion" class="accordion-style2">
-                        @if($categories)
-                        @foreach($categories as $category)
-                        <div class="card">
-                            <div class="card-header" id="headingOne">
-                                @if($category->sub_category->isNotEmpty())
-                                <h5 class="mb-0">
-                                    <button class="btn btn-link " data-bs-toggle="collapse" data-bs-target="#collapseOne{{$category->id}}" aria-expanded="true" aria-expanded="true" aria-controls="collapseOne">{{ $category->category}}</button>
-                                </h5>
-                                @else
-                                <h5 class="mb-0">
-                                    <a href="{{route('category.product',[$category->id,$category->category])}}" class="btn btn-link ">{{ $category->category}}</a>
-                                </h5>
+<div class="col-xl-3 col-lg-3 col-md-12 col-12 sidebar left-sidebar md-b-50" >
+    <!-- Block Product Categories -->
+    <div class="block block-product-cats">
+        <div class="block-title">
+            <h2 class="card-header">Categories</h2>
+        </div>
+        <div class="block-content  card p-2">
+            <div class="product-cats-list">
+                <ul>
+                    @if($categories->isNotEmpty())
+                    @foreach($categories as $category)
+                    <li class="current">
+                        <a href="{{route('category.product',[$category->id,$category->category])}}">{{$category->category}} <span class="count text-capitalize">
+                                @if($category->product)
+                                {{$category->product->count()}}
                                 @endif
-                            </div>
-                            @if($category->sub_category)
+                            </span></a>
+                    </li>
+                    @if($category->sub_category->isNotEmpty())
+                    @foreach($category->sub_category as $sub_category)
 
-                            @foreach($category->sub_category as $sub)
+                    <li class="current">
+                        <a href="{{route('sub_category.product',[$sub_category->id, $sub_category->sub_category])}}">{{$sub_category->sub_category}} <span class="count text-capitalize">
+                                @if($sub_category->product)
+                                {{$sub_category->product->count()}}
+                                @endif
+                            </span></a>
+                    </li>
+                    @endforeach
+                    @endif
 
-                            <div id="collapseOne{{$category->id}}" class="collapse show" aria-labelledby="headingOne" data-bs-parent="#accordion" style="">
-                                <div class="card-body">
-                                    <ul class="list-unstyled">
-                                        <li><a href="{{route('sub_category.product',[$sub->id,$sub->sub_category])}}"><strong>{{$sub->sub_category}}</strong></a>
-                                            @if($sub->sub_sub_category)
-                                            @foreach($sub->sub_sub_category as $subsubcategory)
-                                            <ul class="list-unstyled">
-                                                <li><a href="{{route('subsub_category.product',[$subsubcategory->id,$subsubcategory->sub_sub_category])}}">{{$subsubcategory->sub_sub_category}}</a>
-                                            </ul>
-                                            @endforeach
-                                            @endif
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            @endforeach
-                            @endif
-                        </div>
-                        @endforeach
-                        @endif
-                    </div>
-                </div>
+                    @if($sub_category->sub_sub_category->isNotEmpty())
+                    @foreach($sub_category->sub_sub_category as $sub_sub_category)
 
+                    <li class="current">
+                        <a href="{{route('subsub_category.product',[$sub_sub_category->id, $sub_sub_category->sub_sub_category])}}">{{$sub_sub_category->sub_sub_category}} <span class="count text-capitalize">
+                                @if($sub_sub_category->product)
+                                {{$sub_sub_category->product->count()}}
+                                @endif
+                            </span></a>
+                    </li>
+                    @endforeach
+                    @endif
 
-
-
-
-
-
-                <div class="offer-slider owl-carousel owl-theme owl-loaded owl-drag">
-                    <div class="owl-stage-outer">
-                        <div class="owl-stage" style="transform: translate3d(-612px, 0px, 0px); transition: all 1s ease 0s; width: 2142px;">
-                            @if($banners)
-                            <?php
-                            $i = 1;
-                            ?>
-                            @foreach($banners as $banner)
-                            <div class="owl-item {{$i==1 ? 'active' : 'cloned'}}" style="width: 306px;">
-                                <div class="offer-banner-slider" style="background-image:url({{$banner->image}});">
-                                    <div class="offer-text">
-                                        <h4 class="font-weight-500 text-white"><a href="#" class="text-white">{{$banner->title}}</a></h4>
-                                        <a class="butn-style1 fill small" href="{{route('all.products')}}"><span>Shop Now</span></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <?php
-                            $i = $i + 1;
-                            ?>
-                            @endforeach
-                            @endif
-                        </div>
-                    </div>
-                    <div class="owl-nav disabled"><button type="button" role="presentation" class="owl-prev"><span aria-label="Previous">‹</span></button><button type="button" role="presentation" class="owl-next"><span aria-label="Next">›</span></button></div>
-                    <div class="owl-dots disabled"></div>
-                </div>
-
+                    @endforeach
+                    @endif
+                </ul>
             </div>
+        </div>
+    </div>
+
+
+
+
+
+    <!-- Block Product Filter -->
+    <div class="block block-product-filter clearfix">
+        <div class="block-title">
+            <h2>Hot Sales</h2>
+        </div>
+        <div class="block-content">
+            <ul class="filter-items image">
+                @if($banners->isNotEmpty())
+                @foreach($banners as $banner)
+                <li><span>
+                        <a href="{{$banner->link}}"><img src="{{$banner->image}}" alt="Brand"></a>
+                    </span></li>
+                @endforeach
+                @endif
+            </ul>
+        </div>
+    </div>
+
+</div>

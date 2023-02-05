@@ -26,7 +26,7 @@ $subcategories = Subcategory::latest()->take(8)->get();
                     </strong> <br>
 
 
-                    At Home Box, we constantly research the market and endeavour to create products that fulfill the needs of our customers. Our aim is to fill the gap in the market for fashion-forward, contemporary home essentials at value-for-money prices. <br>
+                    At 4space, we constantly research the market and endeavour to create products that fulfill the needs of our customers. Our aim is to fill the gap in the market for fashion-forward, contemporary home essentials at value-for-money prices. <br>
 
                     Owned and managed by the PEC invesment Group, the brand has an extensive range of great quality products. 4space has been successfully established across in Saudi Arabia.
                   </p>

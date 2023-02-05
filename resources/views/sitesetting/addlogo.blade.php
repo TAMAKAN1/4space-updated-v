@@ -220,7 +220,11 @@ $banners = Banner::orderBy('id', 'desc')->get();
                         <label for="" class="text-left"><strong>Banner Title* </strong></label> <br>
                         <input type="text" name="title" class="form-control" style="border:1px solid #cdcd" placeholder="Enter title" required>
                      </div>
-                     <div class="col-md-8">
+                     <div class="col-md-4">
+                        <label for="" class="text-left"><strong>Link* </strong></label> <br>
+                        <input type="text" name="link" class="form-control" style="border:1px solid #cdcd" placeholder="Enter the Link" required>
+                     </div>
+                     <div class="col-md-4">
                         <label for="" class="text-left"><strong> Image *</strong></label> <br>
                         <input type="file" name="image" id="" required>
                      </div>
@@ -248,6 +252,7 @@ $banners = Banner::orderBy('id', 'desc')->get();
                         <tr>
                            <th class="border-top-0">#</th>
                            <th class="border-top-0">Tittle</th>
+                           <th class="border-top-0">link</th>
                            <th class="border-top-0">Image</th>
                            <th class="border-top-0">Action</th>
                         </tr>
@@ -260,6 +265,7 @@ $banners = Banner::orderBy('id', 'desc')->get();
                         <tr>
                            <td>{{$i++}}</td>
                            <td>{{$banner->title}}</td>
+                           <td><a href="{{$banner->link}}">{{$banner->link}}</a></td>
                            <td><a href="{{$banner->image}}" target="_blank"> <img src="{{asset($banner->image)}}" alt="" width="50" height="30"></a></td>
                            <td>
                               <a class="btn btn-sm btn-dark text-white m-2" data-bs-toggle="modal" data-bs-target="#banner{{$banner->id}}"><i class="fa fa-edit"></i></a>
@@ -281,6 +287,10 @@ $banners = Banner::orderBy('id', 'desc')->get();
                                                       <div class="col-md-12">
                                                          <label for="" class="text-left"><strong> Title* </strong></label> <br>
                                                          <input type="text" name="title" class="form-control" style="border:1px solid #cdcd" value="{{$banner->title}}">
+                                                      </div>
+                                                      <div class="col-md-12">
+                                                         <label for="" class="text-left"><strong> Link* </strong></label> <br>
+                                                         <input type="text" name="link" class="form-control" style="border:1px solid #cdcd" value="{{$banner->link}}">
                                                       </div>
                                                       <div class="col-md-12">
                                                          <label for="" class="text-left"><strong> Image *</strong></label> <br>

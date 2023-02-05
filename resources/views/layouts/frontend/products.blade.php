@@ -13,7 +13,7 @@ $allproduct = Product::latest()->take(12)->get();
 				<div class="block-title title-underline">
 					<h2>Latest Products</h2>
 					<div class="title-right">
-						<a href="shop-grid-left.html">View All</a>
+						<a href="{{route('all.products')}}">View All</a>
 					</div>
 				</div>
 				<div class="block-content">
@@ -25,15 +25,22 @@ $allproduct = Product::latest()->take(12)->get();
 									<div class="products-entry clearfix product-wapper">
 										<div class="products-thumb">
 											<div class="product-thumb-hover">
-												<a href="shop-details.html">
-													<img width="600" height="600" src="media/product/1.jpg" class="post-image" alt="">
-													<img width="600" height="600" src="media/product/1-2.jpg" class="hover-image back" alt="">
+												<a href="{{route('product.details',[$product->id,$product->title])}}">
+													@if($product->images)
+													<img width="600" height="600" src="{{$product->images[0]->file}}" class="post-image" alt="">
+													@if($product->images[1])
+													<img width="600" height="600" src="{{$product->images[1]->file}}" class="hover-image back" alt="">
+													@else
+													<img width="600" height="600" src="{{$product->images[0]->file}}" class="hover-image back" alt="">
+													@endif
+													@endif
 												</a>
 											</div>
 											<div class="product-button">
-												<div class="btn-add-to-cart" data-title="Add to cart">
-													<a rel="nofollow" href="#" class="product-btn button">Add to cart</a>
-												</div>
+													<form action="{{route('store.cart',$product->id)}}" method="post">
+														@csrf
+														<button type="submit" class="btn btn-dark btn-sm">Add to cart</button>
+													</form>
 												<div class="btn-wishlist" data-title="Wishlist">
 													<button class="product-btn">Add to wishlist</button>
 												</div>
@@ -42,8 +49,8 @@ $allproduct = Product::latest()->take(12)->get();
 										</div>
 										<div class="products-content">
 											<div class="contents text-center">
-												<h3 class="product-title"><a href="shop-details.html">Zunkel Schwarz</a></h3>
-												<span class="price">$100.00</span>
+												<h3 class="product-title"><a href="{{route('product.details',[$product->id,$product->title])}}">{{$product->title}}</a></h3>
+												<span class="price">{{$product->price}} SAR</span>
 											</div>
 										</div>
 									</div>

@@ -20,6 +20,7 @@ class CreateProductsTable extends Migration
             $table->string('fabric');
             $table->text('width');
             $table->text('height');
+            $table->text('size');
             $table->text('color');
             $table->string('custom_status');
             $table->string('SKU')->nullable();

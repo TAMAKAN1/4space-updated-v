@@ -1,106 +1,86 @@
 @extends('layouts.frontend.app')
 @section('content')
 
-<section class="md">
-    <div class="container-fluid">
-        <div class="row">
 
-            <!-- sidebar panel -->
-            @include('product.productside')
+<div id="site-main" class="site-main mt-4 mb-4">
+    <div id="main-content" class="main-content">
+        <div id="primary" class="content-area">
 
-            <!-- end sidebar panel -->
+            <div id="content" class="site-content" role="main">
+                <div class="col-md-12 text-right mt-2 mt-4">
+                    <form class="form-inline" method="get" action="{{route('search.product')}}">
+                        @csrf
+                        <div class="col-md-12">
 
-            <!-- right panel section -->
-            <div class="col-lg-9 col-12 ps-lg-1-9 order-1 order-lg-2 mb-1-9 mb-lg-0">
-
-                <div class="row g-0 align-items-center bg-light rounded p-3 mb-1-9">
-                    <div class="col-12 col-md my-1 my-md-0 text-center text-md-start font-weight-600">Latest Products..</div>
+                            <input class="form-control mr-sm-2" type="search" placeholder="Search Here" aria-label="Search" name="name">
+                            <button class="btn btn-outline-dark my-2 my-sm-0" type="submit"><i class="fa fa-search"></i></button>
+                    </form>
                 </div>
+                <div class="section-padding">
+                    <div class="section-container p-l-r">
+                        <div class="row">
+                            @include('product.productside')
 
-                <div class="row justify-content-center">
-                    @if($products->isNotEmpty())
-                    @foreach($products as $product)
-                    <div class="col-11 col-sm-6 col-xl-4 mb-1-9">
-                        <div class="product-grid">
-                            @if($product->images)
-                            <div class="product-img">
-                                <a href="{{route('product.details',[$product->id,$product->title])}}">
-                                    <img src="{{asset($product->images[0]->file)}}" alt="...">
-                                </a>
-                            </div>
-                            @endif
-                            <div class="product-description">
-                                <h3><a href="{{route('product.details',[$product->id,$product->title])}}">{{$product->title}}</a></h3>
-                                <h4 class="price">
-                                    <span class="offer-price">{{$product->price}} SAR</span>
-                                </h4>
-                            </div>
-                            <div class="product-buttons">
-                                <ul class="ps-0">
-                                    <li>
+                            <div class="col-xl-9 col-lg-9 col-md-12 col-12">
+                                <div class="tab-content">
+                                    <div class="tab-pane fade show active" id="layout-grid" role="tabpanel">
+                                        <div class="products-list grid">
+                                            <div class="row">
+                                                @if($sub_sub_category->product->isNotEmpty())
+                                                @foreach($sub_sub_category->product as $product)
+                                                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
+                                                    <div class="products-entry clearfix product-wapper">
+                                                        <div class="products-thumb">
 
-                                        <form action="{{route('store.wishlist')}}" method="post">
-                                            @csrf
-                                            @if(Auth::user())
-                                            <input type="hidden" name="user_id" value="{{auth()->user()->id}}">
-                                            @endif
-                                            <input type="hidden" name="product_id" value="{{$product->id}}">
-                                            @if(Auth::user())
+                                                            <div class="product-thumb-hover">
+                                                                @if($product->images)
+                                                                <a href="{{route('product.details',[$product->id,$product->title])}}">
+                                                                    <img width="600" height="600" src="{{$product->images[0]->file}}" class="post-image" alt="">
+                                                                    @if($product->images[1])
+                                                                    <img width="600" height="600" src="{{$product->images[1]->file}}" class="hover-image back" alt="">
+                                                                    @else
+                                                                    <img width="600" height="600" src="{{$product->images[0]->file}}" class="post-image" alt="">
+                                                                    @endif
+                                                                </a>
+                                                                @endif
+                                                            </div>
+                                                            <div class="product-button">
+                                                                <div class="btn-add-to-cart" data-title="Add to cart">
+                                                                    <a rel="nofollow" href="#" class="product-btn button">Add to cart</a>
+                                                                </div>
+                                                                <div class="btn-wishlist" data-title="Wishlist">
+                                                                    <button class="product-btn">Add to wishlist</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="products-content">
+                                                            <div class="contents text-center">
+                                                                <h3 class="product-title"><a href="{{route('product.details',[$product->id,$product->title])}}"> <strong>{{$product->title}}</strong></a></h3>
+                                                                <span class="price"><strong>{{$product->price}} SAR</strong></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @endforeach
+                                                @else
+                                                <div class="alert alert-danger text-center col-md-12 mt-4">
+                                                    <p>Product Not add Yet!</p>
+                                                </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
 
-                                            <?php
-                                            $wishlists = App\Wishlisht::where('product_id', $product->id)->where('user_id', auth()->user()->id)->first();
-                                            ?>
+                                </div>
 
-                                            @if($wishlists)
-                                            <a href="{{route('wishlists')}}" type="submit" style="border: none; background:none"><i class="ti-heart text-danger fill-danger"></i></a>
-                                            @else
-                                            <button type="submit" style="border: none; background:none"><i class="ti-heart"></i></button>
-                                            @endif
-                                            @else
-                                            <button type="submit" style="border: none; background:none"><i class="ti-heart"></i></button>
-
-                                            @endif
-
-                                        </form>
-                                    </li>
-                                    <li>
-                                    @if($product->status=="in stock")
-                                        <?php
-                                        $find = Cart::get($product->id);
-
-                                        ?>
-                                        @if( $find)
-                                        <a href="{{route('cart')}}" class="btn btn-dark text-white btn-sm">View cart</a>
-                                        @else
-                                        <form action="{{route('store.cart',$product->id)}}" method="post">
-                                            @csrf
-                                            <input type="hidden" name="quantity" min="1" value="1">
-                                            <button type="submit" class="btn btn-dark text-white btn-sm">+ Add to cart</button>
-                                        </form>
-                                        @endif
-                                        @else
-                                        <span class="badge bg-danger"> Out of the stock</span> <br>
-                                        <a href="mailto:info@4space.com.sa">Contact us <i class="ti-email  text-dark"></i></a>
-
-                                        @endif
-                                    </li>
-                                </ul>
                             </div>
                         </div>
                     </div>
-                    @endforeach
-                    @else
-                    <div class="alert alert-danger">
-                        <p>Product Not Add Yet!</p>
-                    </div>
-                    @endif
                 </div>
-
-
             </div>
             <!-- end right panel section -->
-
         </div>
     </div>
-</section>
+</div>
+
 @endsection

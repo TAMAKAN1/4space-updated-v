@@ -26,7 +26,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label for=""> <strong>Product SKU*</strong></label>
-                                <input type="text" class="form-control @error('SKU') is-invalid @enderror" value="{{$product->SKU}}" name="SKU"  required>
+                                <input type="text" class="form-control @error('SKU') is-invalid @enderror" value="{{$product->SKU}}" name="SKU" required>
                                 @error('SKU')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -51,9 +51,11 @@
                                 <div class="form-group">
                                     <label for=""> <strong>Select Sub Category*</strong></label>
                                     <select name="sub_category_id" id="sub_category_id" class="form-control">
+                                        @if($product->sub_category)
                                         @foreach(App\Subcategory::where('id',$product->sub_category->id)->orderBy('id','desc')->get() as $sub_category)
                                         <option value="{{$sub_category->id}}">{{$sub_category->sub_category}}</option>
                                         @endforeach
+                                        @endif
                                     </select>
 
                                 </div>
@@ -62,9 +64,13 @@
                                 <div class="form-group">
                                     <label for=""> <strong>Select Sub Sub Category</strong></label>
                                     <select name="sub_sub_category_id" id="sub_sub_category_id" class="form-control">
+                                        @if($product->sub_sub_category)
+
                                         @foreach(App\SubSubCategory::where('id',$product->sub_sub_category->id)->orderBy('id','desc')->get() as $sub_sub_category)
                                         <option value="{{$sub_sub_category->id}}">{{$sub_sub_category->sub_sub_category}}</option>
                                         @endforeach
+                                        @endif
+
                                     </select>
 
                                 </div>
@@ -119,6 +125,7 @@
                                 </span>
                                 @enderror
                             </div>
+
                             <div class="col-md-6">
                                 <label for=""> <strong>Customization Status*</strong></label>
                                 <select name="custom_status" id="" required class="form-control">
@@ -132,12 +139,22 @@
                     </div>
                     <div class="form-group">
                         <div class="row mt-4">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
+                                <label for=""> <strong>Size</strong></label>
+                                <input type="text" class="form-control @error('size') is-invalid @enderror" name="size"  value="{{$product->size}}" data-role="tagsinput" >
+                                @error('size')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+
+                            </div>
+                            <div class="col-md-6">
                                 <label for=""> <strong>Status*</strong></label>
                                 <select name="status" id="" class="form-control">
-                                        <option value="">Choose one</option>
-                                        <option value="in stock" {{$product->status=="in stock" ? 'selected' : ''}}>In Stock</option>
-                                        <option value="out of the stock" {{$product->status=="out of the stock" ? 'selected' : ''}}>Out OF The Stock </option>
+                                    <option value="">Choose one</option>
+                                    <option value="in stock" {{$product->status=="in stock" ? 'selected' : ''}}>In Stock</option>
+                                    <option value="out of the stock" {{$product->status=="out of the stock" ? 'selected' : ''}}>Out OF The Stock </option>
                                 </select>
                                 @error('color')
                                 <span class="invalid-feedback" role="alert">
@@ -145,7 +162,7 @@
                                 </span>
                                 @enderror
                             </div>
-                        
+
                         </div>
                     </div>
                     <div class="form-group">

@@ -27,6 +27,7 @@ class OrderController extends Controller
             $product->color = $item->attributes->color;
             $product->description = $item->attributes->description;
             $product->height = $item->attributes->height;
+            $product->size = $item->attributes->size;
             $product->width = $item->attributes->width;
             $product->subTotal = $item->getPriceSum();
             $products->push($product);
@@ -51,6 +52,7 @@ class OrderController extends Controller
                 'width' => ($request->width != null) ? $request->width : null,
                 'height' => ($request->height != null) ? $request->height : null,
                 'color' => ($request->color != null) ? $request->color : null,
+                'size' => ($request->color != null) ? $request->size : null,
                 'description' => ($request->description != null) ? $request->description : null,
             )
         ));

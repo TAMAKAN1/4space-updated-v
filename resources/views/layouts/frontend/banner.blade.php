@@ -13,7 +13,7 @@ $banners = Banner::latest()->take(8)->get();
                         <div class="col-lg-3 col-md-6 md-b-10">
                               <div class="cat-item">
                                     <div class="cat-image">
-                                          <a href="{{route('all.products')}}">
+                                          <a href="{{$banner->link}}">
                                                 <img width="469" height="475" src="{{$banner->image}}" alt="Product Branner">
                                           </a>
                                     </div>
@@ -21,7 +21,7 @@ $banners = Banner::latest()->take(8)->get();
                                     <div class="cat-title">
 
                                        
-                                          <a href="{{route('all.products')}}">
+                                          <a href="{{$banner->link}}">
                                                 {{$banner->title}}
                                           </a>
                                     </div>

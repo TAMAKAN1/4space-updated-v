@@ -1,4 +1,5 @@
 <?php
+
 use App\Logo;
 
 $frontend = Logo::where('place', 'Homepage')->orderBy('id', 'desc')->first()
@@ -28,6 +29,7 @@ $frontend = Logo::where('place', 'Homepage')->orderBy('id', 'desc')->first()
     <link rel="stylesheet" href="{{asset('libs/slick/css/slick.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('libs/slick/css/slick-theme.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('libs/mmenu/css/mmenu.min.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{asset('libs/slider/css/jslider.css')}}">
 
     <!-- Site Stylesheet -->
     <link rel="stylesheet" href="{{asset('css/app.css')}}" type="text/css">
@@ -95,7 +97,11 @@ $frontend = Logo::where('place', 'Homepage')->orderBy('id', 'desc')->first()
     <script src="{{asset('libs/slick/js/slick.min.js')}}"></script>
     <script src="{{asset('libs/countdown/js/jquery.countdown.min.js')}}"></script>
     <script src="{{asset('libs/mmenu/js/jquery.mmenu.all.min.js')}}"></script>
-
+    <script src="{{asset('libs/slider/js/tmpl.js')}}"></script>
+    <script src="{{asset('libs/slider/js/jquery.dependClass-0.1.js')}}"></script>
+    <script src="{{asset('libs/slider/js/draggable-0.1.js')}}"></script>
+    <script src="{{asset('libs/slider/js/jquery.slider.js')}}"></script>
+    <script src="{{asset('libs/elevatezoom/js/jquery.elevatezoom.js')}}"></script>
     <!-- Site Scripts -->
     <script src="{{asset('js/app.js')}}"></script>
     @yield('script')
