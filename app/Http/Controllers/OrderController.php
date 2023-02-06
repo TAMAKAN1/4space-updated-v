@@ -35,7 +35,25 @@ class OrderController extends Controller
         return view('order.cart', compact('products', 'cart'));
     }
 
-
+    public function checkout()
+    {
+        $cart['count'] = Cart::getContent()->count();
+        $products = new Collection();
+        $cart_items = Cart::getContent();
+        $cart['subTotal'] = Cart::getSubTotal();
+        foreach ($cart_items as $item) {
+            $product = Product::find($item->id);
+            $product->quantity = $item->quantity;
+            $product->color = $item->attributes->color;
+            $product->description = $item->attributes->description;
+            $product->height = $item->attributes->height;
+            $product->size = $item->attributes->size;
+            $product->width = $item->attributes->width;
+            $product->subTotal = $item->getPriceSum();
+            $products->push($product);
+        }
+        return view('order.checkout', compact('products', 'cart'));
+    }
     public function addCart(Request $request, Product $product)
     {
 
@@ -83,20 +101,7 @@ class OrderController extends Controller
         return redirect()->back();
     }
 
-    public function checkout()
-    {
-        $cart['count'] = Cart::getContent()->count();
-        $products = new Collection();
-        $cart_items = Cart::getContent();
-        $cart['subTotal'] = Cart::getSubTotal();
-        foreach ($cart_items as $item) {
-            $product = Product::find($item->id);
-            $product->quantity = $item->quantity;
-            $product->subTotal = $item->getPriceSum();
-            $products->push($product);
-        }
-        return view('order.checkout', compact('products', 'cart'));
-    }
+
 
 
 
@@ -113,6 +118,7 @@ class OrderController extends Controller
             $product->description = $item->attributes->description;
             $product->height = $item->attributes->height;
             $product->width = $item->attributes->width;
+            $product->size = $item->attributes->size;
             $product->subTotal = $item->getPriceSum();
             $products->push($product);
         }
@@ -124,7 +130,7 @@ class OrderController extends Controller
             'note' => $request->note,
             'order_status' => 'pending'
         ]);
-      
+
         foreach ($products as $product) {
             OrderDetails::create([
                 'order_id' => $order->id,
@@ -133,6 +139,7 @@ class OrderController extends Controller
                 'color' => $product->color,
                 'width' => $product->width,
                 'height' => $product->height,
+                'size' => $product->size,
                 'subtotal' => $product->subTotal,
                 'description' => $product->description,
             ]);
@@ -150,7 +157,7 @@ class OrderController extends Controller
         Cart::clear();
         $data = $order;
         Mail::mailer('smtp')->to('sales@4space.com.sa')->send(new Contact($data));
-        
+
         toastr()->success('order placeed');
         return redirect()->route('order.after.place', $order->id);
     }
@@ -171,22 +178,21 @@ class OrderController extends Controller
         toastr()->success('Order Deleted');
         return redirect()->back();
     }
-    public function change_status(Order $order,Request $request)
+    public function change_status(Order $order, Request $request)
     {
         $order->order_status = $request->order_status;
         $order->save();
-        $data=$order;
+        $data = $order;
         // Mail::mailer('smtp')->to($order->user->email)->send(new OrderConfirm($data));
         toastr()->success('Changed Successfully');
         return redirect()->back();
     }
 
-    public function customer_change_status(Order $order,Request $request)
+    public function customer_change_status(Order $order, Request $request)
     {
         $order->order_status = $request->customer_order_status;
         $order->save();
         toastr()->success('Order Canceled');
         return redirect()->back();
     }
-
 }

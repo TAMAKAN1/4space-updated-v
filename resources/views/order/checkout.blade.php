@@ -1,18 +1,18 @@
 @extends('layouts.frontend.app')
 @section('content')
-<section class="py-0">
+<section class="py-0 mt-4 mb-4">
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-6 col-md-12 ps-2-3 mb-1-9 mb-lg-0">
 
                 <div class="common-block">
 
-                    <div class="inner-title">
-                        <h4 class="mb-0">Review Your Order</h4>
+                    <div class="inner-title card-header p-2 text-center">
+                        <h4 class="mb-0"><strong>Review Your Order</strong></h4>
                     </div>
 
                     <div class="shop-cart-table">
-                        <table class="table border shop-cart text-center">
+                        <table class="table border shop-cart text-center table-responsive">
                             <colgroup>
                                 <col width="100">
                                 <col>
@@ -53,8 +53,15 @@
                                         @if($product->color)
                                         <span class="text-capitalize d-block">Color: {{$product->color}}</span>
                                         @endif
-
-
+                                        @if($product->size)
+                                        <span class="text-capitalize d-block">Size: {{$product->size}}</span>
+                                        @endif
+                                        @if($product->description)
+                                        <span class="text-capitalize d-block">Description: {{$product->description}}</span>
+                                        @endif
+                                        @if($product->custom_status=="Yes")
+                                        <p><small><strong>Note:</strong> if you have customization, then price will be effect.</small></p>
+                                        @endif
                                     </td>
                                     <td class="text-start">
                                         {{$product->price}} SAR
@@ -84,7 +91,7 @@
                                         <form action="{{route('destroyCart',$product->id)}}" method="post">
                                             @csrf
                                             @method('Delete')
-                                            <button type="submit" class="btn btn-danger text-white btn-sm"><i class="fas fa-trash"></i></button>
+                                            <button type="submit" class="btn btn-danger text-white btn-sm"><i class="fa fa-trash"></i></button>
                                         </form>
 
                                     </td>
@@ -206,7 +213,7 @@
 
                         </div>
                     </div>
-                    <div class="widget text-left">
+                    <div class="widget text-right">
                         <table class="table">
                             <tbody class=" p-4 ">
                                 <tr class="p-4">
@@ -218,13 +225,13 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="col-md-12 mb-4">
+                    <div class="col-md-12 mb-4 widget text-right">
                         <small><strong>Note:</strong>Total Price will be Change depend on customization and Shipping area*. </small>
                     </div>
                     @if($cart['subTotal'] !=0)
 
                     <div class="col-md-12 text-right">
-                        <button type="submit" class="butn-style2 wide">Place Order <i class="fas fa-arrow-right ms-1"></i></button>
+                        <button type="submit" class="btn btn-dark text-white wide">Place Order <i class="fa fa-arrow-right ms-1"></i></button>
                     </div>
                     @endif
                 </form>

@@ -19,6 +19,7 @@ class CreateOrderDetailsTable extends Migration
             $table->string('color')->nullable();
             $table->string('width')->nullable();
             $table->string('height')->nullable();
+            $table->string('size')->nullable();
             $table->float('subtotal');
             $table->text('description')->nullable();
             $table->foreignId('order_id')->unsigned();

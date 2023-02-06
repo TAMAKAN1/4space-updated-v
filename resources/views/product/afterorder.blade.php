@@ -1,12 +1,12 @@
 
 @extends('layouts.frontend.app')
 @section('content')
-<section class="md">
+<section class="mt-4 mb-4">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
 
-                <div class="common-block text-center">
+                <div class="common-block text-center  card p-4">
 
                     <div class="inner-title">
                         <h3 class="mb-0">Thank you for your order!</h3>
@@ -16,7 +16,7 @@
                        We will get back to you soon via email or phone.
                     </p>
 
-                    <a href="/home" class="butn-style2 wide m-1">Track your order</a>
+                    <a href="/home" class="btn btn-dark text-white wide m-1">Track your order</a>
 
                 </div>
 

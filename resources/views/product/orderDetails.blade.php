@@ -199,19 +199,19 @@ if ($order->order_status == "order confirmed") {
         border-radius: 1px
     }
 </style>
-<section class="md">
-    <div class="container-fluid">
-        <div class="row">
+<div class="container-fluid mt-4 mb-4">
+    <div class="row">
+        <div class="col-md-12">
             <div class="white-box">
                 <article class="card">
                     <header class="card-header"> <strong>Order Details / Tracking view</strong> </header>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6">
-                                <h6>Order ID: <span class="badge bg-info">{{$order->invoice}}</span></h6>
+                                <h4>Order ID: <span class="badge bg-info"><strong>{{$order->invoice}}</strong></span></h4>
                             </div>
                             <div class="col-md-6 text-right">
-                                <h6 class="text-right"> Total Price: {{$order->total}} SAR</h6>
+                                <h4 class="text-right"> <strong>Total Price: {{$order->total}} SAR</strong></h4>
                             </div>
                         </div>
                         <article class="card">
@@ -297,6 +297,11 @@ if ($order->order_status == "order confirmed") {
                                         <span class="text-muted"><strong>Height: </strong> {{$od->height}} </span>
                                         @endif
                                         <br>
+
+                                        @if($od->size)
+                                        <span class="text-muted"><strong>Size: </strong> {{$od->size}} </span>
+                                        @endif
+                                        <br>
                                         @if($od->description)
                                         <span class="text-muted"><strong>Description: </strong> {{$od->description}} </span>
                                         @endif
@@ -313,9 +318,9 @@ if ($order->order_status == "order confirmed") {
                             </div>
                             <div class="col-md-6">
                                 @if($order->order_status=="pending" && auth()->user()->type!="Admin")
-                                <a class="btn btn-danger text-white m-2" data-abc="true" data-bs-toggle="modal" data-bs-target="#exampleModal{{$order->id}}"> <i class="fa fa-sign-out"></i> Cancel Order</a>
+                                <a class="btn btn-danger text-white m-2" data-abc="true"data-toggle="modal" data-target="#exampleModalCenter{{$order->id}}"> <i class="fa fa-sign-out"></i> Cancel Order</a>
                                 <!-- Modal -->
-                                <div class="modal fade" id="exampleModal{{$order->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal fade" id="exampleModalCenter{{$order->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -328,7 +333,7 @@ if ($order->order_status == "order confirmed") {
                                                 <form action="{{route('cancel.customer.order',$order->id)}}" method="post">
                                                     @csrf
                                                     <input type="hidden" name="customer_order_status" value="Cancel by Customer side">
-                                                    <button type="submit" class="btn btn-danger text-white m-2" data-abc="true"> <i class="fa fa-sign-out"></i>Yes</button>
+                                                    <button type="submit" class="btn btn-success text-white m-2" data-abc="true"> <i class="fa fa-sign-out"></i>Yes</button>
                                                 </form>
                                             </div>
                                         </div>
@@ -344,5 +349,5 @@ if ($order->order_status == "order confirmed") {
             </div>
         </div>
     </div>
-</section>
+</div>
 @endsection

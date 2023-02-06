@@ -37,15 +37,49 @@ $allproduct = Product::latest()->take(12)->get();
 												</a>
 											</div>
 											<div class="product-button">
-													<form action="{{route('store.cart',$product->id)}}" method="post">
-														@csrf
-														<button type="submit" class="btn btn-dark btn-sm">Add to cart</button>
-													</form>
-												<div class="btn-wishlist" data-title="Wishlist">
-													<button class="product-btn">Add to wishlist</button>
-												</div>
+												@if($product->status=="in stock")
+												<?php
+												$find = Cart::get($product->id);
+												?>
+												@if( $find)
+												<a href="{{route('cart')}}" class="btn btn-dark text-white btn-sm">View cart</a>
+												@else
+												<form action="{{route('store.cart',$product->id)}}" method="post">
+													@csrf
+													<input type="hidden" name="quantity" min="1" value="1">
+													<button type="submit" class="btn btn-dark text-white btn-sm">+ Add to cart</button>
+												</form>
+												@endif
+												@else
+												<span class="badge bg-danger"> Out of the stock</span> <br>
+												<a href="mailto:sales@4space.com.sa">Contact us <i class="ti-email  text-dark"></i></a>
+
+												@endif
+
+												<form action="{{route('store.wishlist')}}" method="post">
+													@csrf
+													@if(Auth::user())
+													<input type="hidden" name="user_id" value="{{auth()->user()->id}}">
+													@endif
+													<input type="hidden" name="product_id" value="{{$product->id}}">
+													@if(Auth::user())
+
+													<?php
+													$wishlists = App\Wishlisht::where('product_id', $product->id)->where('user_id', auth()->user()->id)->first();
+													?>
+
+													@if($wishlists)
+													<a href="{{route('wishlists')}}" type="submit" style="border: none; background:none"><i class="fa fa-heart text-danger fill-danger"></i></a>
+													@else
+													<button type="submit" style="border: none; background:none" class=""><i class="fa fa-heart"></i></button>
+													@endif
+													@else
+													<button type="submit" style="border: none; background:none"><i class="fa fa-heart"></i></button>
+													@endif
+												</form>
 
 											</div>
+
 										</div>
 										<div class="products-content">
 											<div class="contents text-center">

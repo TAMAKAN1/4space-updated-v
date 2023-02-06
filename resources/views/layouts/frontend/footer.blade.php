@@ -8,7 +8,7 @@ $frontend = Logo::where('place', 'Homepage')->orderBy('id', 'desc')->first();
 $categories = Category::latest()->take(8)->get();
 $subcategories = Subcategory::latest()->take(8)->get();
 ?>
-<footer id="site-footer" class="site-footer">
+<footer id="site-footer" class="site-footer bg-white">
   <div class="footer">
     <div class="section-padding">
       <div class="section-container large">

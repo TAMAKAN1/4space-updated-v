@@ -151,7 +151,7 @@ if (auth()->user()->type == "Admin") {
     <div class="row justify-content-center  mt-4 mb-4">
 
         <!-- left panel -->
-        <div class="col-lg-4 col-sm-9 mb-2-3 mb-lg-0">
+        <div class="col-lg-4 col-sm-9 mb-2-3 mb-lg-0 card p-2">
 
             <div class="account-pannel">
 
@@ -162,14 +162,20 @@ if (auth()->user()->type == "Admin") {
                         <h6 class="mb-0 display-28 text-capitalize">{{auth()->user()->name}}</h6>
                         <small><strong>Email: </strong> {{auth()->user()->email}}</small> <br>
                         <small><strong>Phone: </strong> {{auth()->user()->phone}}</small> <br>
-                        <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal"> <i class="fa fa-edit"></i></a>
+
+                        <a href="" data-toggle="modal" data-target="#exampleModalCenter{{auth()->user()->id}}"> <i class="fa fa-edit"></i></a>
+                    
+
+
                         <!-- Modal -->
-                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
+                        <div class="modal fade" id="exampleModalCenter{{auth()->user()->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Edit Profile</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <h5 class="modal-title" id="exampleModalLongTitle">Edit Profile</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
                                     </div>
                                     <div class="modal-body">
                                         <div class="modal-body">
@@ -224,17 +230,18 @@ if (auth()->user()->type == "Admin") {
                                             </form>
                                         </div>
                                     </div>
-
+                                 
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
 
-                <div class="list-group">
-                    <a class="list-group-items" href="account-orders.html"><i class="ti-bag pe-2"></i>Orders</a>
-                    <a class="list-group-items" href="{{route('wishlists')}}"><i class="ti-heart pe-2"></i>Wishlist</a>
-                    <a class="list-group-items" href="{{ route('logout') }}" onclick="event.preventDefault();
+                <div class="list-group text-center">
+                    <a class="list-group-items card-header" href="/home"><i class="ti-bag pe-2"></i>Orders</a>
+                    <a class="list-group-items card-header" href="{{route('wishlists')}}"><i class="ti-heart pe-2"></i>Wishlist</a>
+                    <a class="list-group-items card-header" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                         <i class="fa fa-sign-out"></i> {{ __('Logout') }}
                     </a>
@@ -253,13 +260,13 @@ if (auth()->user()->type == "Admin") {
 
             <div class="common-block">
 
-                <div class="inner-title">
+                <div class="inner-title card-header">
                     <h4 class="mb-0">Order Summary</h4>
                 </div>
 
                 <div class="col-md-12">
                     <div class="table-responsive">
-                        <table class="table mb-0 myDataTable">
+                        <table class="table mb-0 myDataTable" id="myDataTable">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -310,14 +317,14 @@ if (auth()->user()->type == "Admin") {
                                             <p><strong>Reviewed:</strong> </p>
                                             <span class="text-warning">
                                                 @for($i=1;$i<$order->review->star;$i++)
-                                                    <i class="fas fa-star"></i>
+                                                    <i class="fa fa-star"></i>
                                                     @endfor
                                             </span>
                                             <p><strong>comment:</strong> {{$order->review->comment}}</p>
                                         </div>
                                         @else
                                         @if($order->order_status=="delivered")
-                                        <a href="" class="btn btn-sm btn-success m-2" data-bs-toggle="modal" data-bs-target="#reveiw{{$order->id}}"><i class="fa fa-star "></i>Review Us</a>
+                                        <a href="" class="btn btn-sm btn-warning m-2" data-toggle="modal" data-target="#reveiw{{$order->id}}"><i class="fa fa-star "></i>Review Us</a>
 
                                         <!-- Modal -->
                                         <div class="modal fade" id="reveiw{{$order->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -363,7 +370,7 @@ if (auth()->user()->type == "Admin") {
 
                                                             </div>
 
-                                                            <button type="submit" class="butn-style2">Submit Review</button>
+                                                            <button type="submit" class="btn btn-dark">Submit Review</button>
                                                         </form>
 
                                                     </div>
@@ -399,7 +406,7 @@ if (auth()->user()->type == "Admin") {
 @section('script')
 <script>
     $(document).ready(function() {
-        $('.myDataTable').DataTable();
+        $('#myDataTable').DataTable();
     });
 </script>
 @endsection

@@ -30,7 +30,7 @@ $frontend = Logo::where('place', 'Homepage')->orderBy('id', 'desc')->first()
     <link rel="stylesheet" href="{{asset('libs/slick/css/slick-theme.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('libs/mmenu/css/mmenu.min.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('libs/slider/css/jslider.css')}}">
-
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css">
     <!-- Site Stylesheet -->
     <link rel="stylesheet" href="{{asset('css/app.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('css/responsive.css')}}" type="text/css">
@@ -102,8 +102,10 @@ $frontend = Logo::where('place', 'Homepage')->orderBy('id', 'desc')->first()
     <script src="{{asset('libs/slider/js/draggable-0.1.js')}}"></script>
     <script src="{{asset('libs/slider/js/jquery.slider.js')}}"></script>
     <script src="{{asset('libs/elevatezoom/js/jquery.elevatezoom.js')}}"></script>
+    <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
     <!-- Site Scripts -->
     <script src="{{asset('js/app.js')}}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
     @yield('script')
 
 </body>

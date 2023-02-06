@@ -4,6 +4,7 @@ use App\Category;
 use App\Product;
 use App\ReviewDetails;
 
+$reviews = ReviewDetails::where('product_id', $product->id)->get();
 $related_products = Product::where('category_id', $product->category->id)->where('id', '!=', $product->id)->orderBy('id', 'desc')->get();
 ?>
 @extends('layouts.frontend.app')
@@ -53,9 +54,13 @@ $related_products = Product::where('category_id', $product->category->id)->where
                                 <ins><span>{{$product->price}} SAR</span></ins>
                             </span>
                             <div class="rating">
-                                <div class="star star-5"></div>
+                                <span class="text-warning">
+                                    @for($i=1;$i<$reviews->avg('star');$i++)
+                                        <i class="fa fa-star"></i>
+                                    @endfor
+                                </span>
                                 <div class="review-count">
-                                    (3<span> reviews</span>)
+                                    ({{$reviews->count()}}<span> reviews</span>)
                                 </div>
                             </div>
                             <div class="description">
@@ -113,7 +118,7 @@ $related_products = Product::where('category_id', $product->category->id)->where
                                 <div class="col-md-6">
                                     <p>Height</p>
                                     <div class="content">
-                                    <?php
+                                        <?php
                                         $heights = explode(',', $product->height); ?>
                                         @foreach( $heights as $height)
                                         <p class="btn btn-sm text-capitalize">{{ $height}}</p> <br>
@@ -124,19 +129,146 @@ $related_products = Product::where('category_id', $product->category->id)->where
                             </div>
                             <div class="buttons">
                                 <div class="add-to-cart-wrap">
-                                    <div class="quantity">
-                                        <button type="button" class="plus">+</button>
-                                        <input type="number" class="qty" step="1" min="0" max="" name="quantity" value="1" title="Qty" size="4" placeholder="" inputmode="numeric" autocomplete="off">
-                                        <button type="button" class="minus">-</button>
-                                    </div>
-                                    <div class="btn-add-to-cart">
-                                        <a href="#" class="button" tabindex="0">Add to cart</a>
-                                    </div>
+                                    @if($product->status=="in stock")
+
+                                    <?php
+
+                                    $find = Cart::get($product->id);
+
+                                    ?>
+                                    @if($find)
+                                    <a href="{{route('cart')}}" class="btn btn-dark text-white btn-sm">View cart</a>
+                                    @else
+                                    <form action="{{route('store.cart',$product->id)}}" method="post">
+                                        @csrf
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <p><strong>Lets Buy....</strong></p>
+                                            </div>
+                                            <div class="col-5 col-md-4">
+                                                <label>Width:</label>
+
+                                                <select class="mb-4 form-control medium form-select" name="width">
+                                                    <?php
+
+
+                                                    $width = explode(",", $product->width);
+
+                                                    ?>
+                                                    <option value="">Choose one</option>
+
+                                                    @foreach( $width as $wid)
+                                                    <option value="{{$wid}}">{{$wid}}</option>
+                                                    @endforeach
+
+                                                </select>
+
+                                            </div>
+                                            <div class="col-5 col-md-4">
+                                                <label>Height:</label>
+
+                                                <select class="mb-4 form-control medium form-select" name="height">
+                                                    <option value="">Choose one</option>
+
+                                                    <?php
+                                                    $heights = explode(",", $product->height);
+
+                                                    ?>
+                                                    @foreach( $heights as $height)
+
+
+                                                    <option value="{{$height}}">{{$height}}</option>
+                                                    @endforeach
+
+                                                </select>
+
+                                            </div>
+                                            <div class="col-5 col-md-4">
+                                                <div class="product-color">
+                                                    <label>Color:</label>
+                                                    <select class="mb-4 form-control medium form-select" name="color">
+                                                        <option value="">Choose one</option>
+                                                        <?php
+                                                        $colors = explode(",", $product->color);
+
+                                                        ?>
+                                                        @foreach($colors as $color)
+                                                        <option value="{{$color}}">{{$color}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2">
+
+                                            <div class="col-5 col-md-4">
+                                                <div class="product-color">
+                                                    <label>Size:</label>
+                                                    <select class="mb-4 form-control medium form-select" name="size">
+                                                        <option value="">Choose one</option>
+                                                        <?php
+                                                        $sizes = explode(",", $product->size);
+
+                                                        ?>
+                                                        @foreach($sizes as $size)
+                                                        <option value="{{$size}}">{{$size}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 ">
+                                                <label>Qty:</label>
+                                                <input type="number" name="quantity" value="1" min="1" placeholder="1" class="form-control medium " required>
+                                            </div>
+                                            @if($product->custom_status=="Yes")
+                                            <div class="col-md-6  mt-4 ">
+                                                <label for="customization">Have Customization?</label>
+                                                <input type="checkbox" id="customization" name="customization" value="Yes">
+                                                <br>
+                                                <small><strong>Note*:</strong> Customization effect on pricing..</small>
+                                            </div>
+                                            <div class="col-md-12  mt-4" id="customcontent">
+                                                <label for="">Leave A Note Here:</label>
+                                                <textarea name="description" id="" cols="30" rows="10" class="form-control"></textarea>
+                                            </div>
+                                            @endif
+                                            <div class="col-md-6">
+                                                <div class="col-md-12 mt-4 ">
+                                                    <button class="btn btn-dark text-white me-3 mb-2 mb-md-0"><span><i class="fa fa-shopping-cart me-1"></i> Add to Cart</span></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    @endif
+                                    @else
+                                    <span class="badge bg-danger"> Out of the stock</span> <br>
+                                    <small> <a href="mailto:info@4space.com.sa">Contact us <i class="ti-email  text-dark"></i></a></small>
+
+                                    @endif
+                                    <form action="{{route('store.wishlist')}}" method="post" class="ml-4">
+                                        @csrf
+                                        @if(Auth::user())
+                                        <input type="hidden" name="user_id" value="{{auth()->user()->id}}">
+                                        @endif
+                                        <input type="hidden" name="product_id" value="{{$product->id}}">
+                                        @if(Auth::user())
+
+                                        <?php
+                                        $wishlists = App\Wishlisht::where('product_id', $product->id)->where('user_id', auth()->user()->id)->first();
+                                        ?>
+
+                                        @if($wishlists)
+                                        <a href="{{route('wishlists')}}" type="submit" style="border: none; background:none"><i class="fa fa-heart text-danger fill-danger"></i></a>
+                                        @else
+                                        <button type="submit" style="border: none; background:none" class=""><i class="fa fa-heart"></i></button>
+                                        @endif
+                                        @else
+                                        <button type="submit" style="border: none; background:none"><i class="fa fa-heart"></i></button>
+                                        @endif
+                                    </form>
                                 </div>
                                 <br>
-                                <div class="btn-wishlist col-md-12">
-                                    <button class="product-btn">Add to wishlist</button>
-                                </div>
+
 
                             </div>
                             <div class="product-meta">
@@ -172,7 +304,7 @@ $related_products = Product::where('category_id', $product->category->id)->where
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#reviews" role="tab">Reviews (1)</a>
+                                <a class="nav-link" data-toggle="tab" href="#reviews" role="tab">Reviews ({{$reviews->count()}})</a>
                             </li>
                         </ul>
                         <div class="tab-content">
@@ -182,66 +314,45 @@ $related_products = Product::where('category_id', $product->category->id)->where
 
                             <div class="tab-pane fade" id="reviews" role="tabpanel">
                                 <div id="reviews" class="product-reviews">
-                                    <div id="comments">
-                                        <h2 class="reviews-title">1 review for <span>Bora
-                                                Armchair</span></h2>
-                                        <ol class="comment-list">
-                                            <li class="review">
-                                                <div class="content-comment-container">
-                                                    <div class="comment-container">
-                                                        <img src="media/user.jpg" class="avatar" height="60" width="60" alt="">
-                                                        <div class="comment-text">
-                                                            <div class="rating small">
-                                                                <div class="star star-5"></div>
-                                                            </div>
-                                                            <div class="review-author">Peter Capidal
-                                                            </div>
-                                                            <div class="review-time">January 12,
-                                                                2022</div>
-                                                        </div>
+
+                                    @if($reviews->isNotEmpty())
+                                    @foreach($reviews as $review)
+                                    <div class="col-lg-8 offset-md-2 order-lg-2 mb-1-9 mb-lg-0">
+                                        <div class="common-block">
+
+                                            <div class="mb-2-3 pb-2-3 border-bottom">
+
+                                                <div class="media mb-4 product-review">
+                                                    <div class="media-body">
+                                                        <a href="#" class="mb-1 font-weight-600 text-dark text-capitalize">{{$review->user->name}}</a>
+                                                        <span class="d-block text-primary">{{date('d F Y', strtotime($review->created_at))}}</span>
                                                     </div>
-                                                    <div class="description">
-                                                        <p>good</p>
-                                                    </div>
+
+                                                    <span class="text-warning">
+                                                        @for($i=1;$i<$review->star;$i++)
+                                                            <i class="fa fa-star"></i>
+                                                            @endfor
+                                                    </span>
+
                                                 </div>
-                                            </li>
-                                        </ol>
+
+                                                <p class="mb-0 text-capitalize"> <strong>Comment: </strong> <br>{{$review->comment}}</p>
+
+                                            </div>
+
+
+
+                                        </div>
+
                                     </div>
-                                    <div id="review-form">
-                                        <div id="respond" class="comment-respond">
-                                            <span id="reply-title" class="comment-reply-title">Add a
-                                                review</span>
-                                            <form action="#" method="post" id="comment-form" class="comment-form">
-                                                <p class="comment-notes">
-                                                    <span id="email-notes">Your email address will
-                                                        not be published.</span> Required fields are
-                                                    marked <span class="required">*</span>
-                                                </p>
-                                                <div class="comment-form-rating">
-                                                    <label for="rating">Your rating</label>
-                                                    <p class="stars">
-                                                        <span>
-                                                            <a class="star-1" href="#">1</a><a class="star-2" href="#">2</a><a class="star-3" href="#">3</a><a class="star-4" href="#">4</a><a class="star-5" href="#">5</a>
-                                                        </span>
-                                                    </p>
-                                                </div>
-                                                <p class="comment-form-comment">
-                                                    <textarea id="comment" name="comment" placeholder="Your Reviews *" cols="45" rows="8" aria-required="true" required=""></textarea>
-                                                </p>
-                                                <div class="content-info-reviews">
-                                                    <p class="comment-form-author">
-                                                        <input id="author" name="author" placeholder="Name *" type="text" value="" size="30" aria-required="true" required="">
-                                                    </p>
-                                                    <p class="comment-form-email">
-                                                        <input id="email" name="email" placeholder="Email *" type="email" value="" size="30" aria-required="true" required="">
-                                                    </p>
-                                                    <p class="form-submit">
-                                                        <input name="submit" type="submit" id="submit" class="submit" value="Submit">
-                                                    </p>
-                                                </div>
-                                            </form><!-- #respond -->
+                                    @endforeach
+                                    @else
+                                    <div class="col-lg-8 offset-md-2 order-lg-2 mb-1-9 mb-lg-0">
+                                        <div class="alert alert-danger">
+                                            Not Review Add Yet!
                                         </div>
                                     </div>
+                                    @endif
                                     <div class="clear"></div>
                                 </div>
                             </div>
@@ -280,13 +391,49 @@ $related_products = Product::where('category_id', $product->category->id)->where
                                                     </div>
                                                     @endif
                                                     <div class="product-button">
-                                                        <div class="btn-add-to-cart" data-title="Add to cart">
-                                                            <a rel="nofollow" href="#" class="product-btn button">Add to
-                                                                cart</a>
-                                                        </div>
-                                                        <div class="btn-wishlist" data-title="Wishlist">
-                                                            <button class="product-btn">Add to
-                                                                wishlist</button>
+                                                        <div class="product-button">
+                                                            @if($r_product->status=="in stock")
+                                                            <?php
+                                                            $find = Cart::get($r_product->id);
+                                                            ?>
+                                                            @if( $find)
+                                                            <a href="{{route('cart')}}" class="btn btn-dark text-white btn-sm">View cart</a>
+                                                            @else
+                                                            <form action="{{route('store.cart',$r_product->id)}}" method="post">
+                                                                @csrf
+                                                                <input type="hidden" name="quantity" min="1" value="1">
+                                                                <button type="submit" class="btn btn-dark text-white btn-sm">+ Add to cart</button>
+                                                            </form>
+                                                            @endif
+                                                            @else
+                                                            <span class="badge bg-danger"> Out of the stock</span> <br>
+                                                            <small> <a href="">Contact us <i class="fa fa-email  text-dark"></i></a></small>
+
+                                                            @endif
+
+                                                            <form action="{{route('store.wishlist')}}" method="post">
+                                                                @csrf
+                                                                @if(Auth::user())
+                                                                <input type="hidden" name="user_id" value="{{auth()->user()->id}}">
+                                                                @endif
+                                                                <input type="hidden" name="product_id" value="{{$r_product->id}}">
+                                                                @if(Auth::user())
+
+                                                                <?php
+                                                                $wishlists = App\Wishlisht::where('product_id', $r_product->id)->where('user_id', auth()->user()->id)->first();
+                                                                ?>
+
+                                                                @if($wishlists)
+                                                                <a href="{{route('wishlists')}}" type="submit" style="border: none; background:none"><i class="fa fa-heart text-danger fill-danger"></i></a>
+                                                                @else
+                                                                <button type="submit" style="border: none; background:none"><i class="fa fa-heart"></i></button>
+                                                                @endif
+                                                                @else
+                                                                <button type="submit" style="border: none; background:none"><i class="fa fa-heart"></i></button>
+
+                                                                @endif
+
+                                                            </form>
                                                         </div>
 
                                                     </div>
@@ -314,4 +461,15 @@ $related_products = Product::where('category_id', $product->category->id)->where
     </div>
 </div>
 
+@endsection
+@section('script')
+<script>
+    $(document).ready(function() {
+        $("#customcontent").hide();
+        $('#customization').click(function() {
+
+            $("#customcontent").toggle();
+        });
+    });
+</script>
 @endsection

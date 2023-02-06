@@ -27,8 +27,11 @@ $categories = Category::orderBy('category')->get();
                         <div class="ruper-topcart dropdown">
                             <div class="dropdown mini-cart top-cart">
                                 <div class="remove-cart-shadow"></div>
-                                <a class="dropdown-toggle cart-icon" href="#" role="button">
-                                    <div class="icons-cart"><i class="icon-large-paper-bag"></i><span class="cart-count">2</span></div>
+                                <a class="dropdown-toggle cart-icon" href="{{route('cart')}}" role="button">
+                                    <?php
+                                    $cart =   Cart::getContent()
+                                    ?>
+                                    <div class="icons-cart"><i class="icon-large-paper-bag"></i><span class="cart-count">{{$cart->count()}}</span></div>
                                 </a>
 
                             </div>
@@ -124,8 +127,14 @@ $categories = Category::orderBy('category')->get();
 
                             <!-- Wishlist -->
                             <div class="wishlist-box">
+
+                                @if(Auth::user())
+                                <?php
+                                $wishlists = App\Wishlisht::where('user_id', auth()->user()->id)->get();
+                                ?>
                                 <a href="{{route('wishlists')}}"><i class="icon-heart"></i></a>
-                                <span class="count-wishlist">1</span>
+                                <span class="count-wishlist">{{ $wishlists->count() }}</span>
+                                @endif
                             </div>
 
                             <!-- Cart -->
@@ -133,7 +142,10 @@ $categories = Category::orderBy('category')->get();
                                 <div class="dropdown mini-cart top-cart">
                                     <div class="remove-cart-shadow"></div>
                                     <a class="dropdown-toggle cart-icon" href="{{route('cart')}}">
-                                        <div class="icons-cart"><i class="icon-large-paper-bag"></i><span class="cart-count">2</span></div>
+                                        <?php
+                                        $cart =   Cart::getContent()
+                                        ?>
+                                        <div class="icons-cart"><i class="icon-large-paper-bag"></i><span class="cart-count">{{$cart->count()}}</span></div>
                                     </a>
 
                                 </div>
